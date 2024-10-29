@@ -46,11 +46,11 @@ function CheckOrder() {
     boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
     borderRadius: "12px",
     padding: "25px",
-    backgroundColor: "#fdfdfd",
+    backgroundColor: "#f9f9f9",
   };
 
   const headerStyle = {
-    backgroundColor: "#8B0000", // Dark red color
+    backgroundColor: "#8B0000",
     color: "white",
     borderTopLeftRadius: "10px",
     borderTopRightRadius: "10px",
@@ -58,22 +58,16 @@ function CheckOrder() {
   };
 
   const textStyle = {
-    fontSize: "16px",
-    fontWeight: "600",
-    color: "#4d4d4d", // Slightly darker color
-    marginBottom: "12px",
+    fontSize: "15px",
+    color: "#6b6b6b",
+    fontWeight: "500",
+    marginBottom: "5px",
   };
 
   const valueStyle = {
-    fontSize: "15px",
+    fontSize: "16px",
     color: "#333",
-    marginBottom: "10px",
-  };
-
-  const cardTitleStyle = {
-    fontSize: "19px",
-    fontWeight: "bold",
-    color: "#8B0000",
+    fontWeight: "600",
   };
 
   return (
@@ -106,45 +100,35 @@ function CheckOrder() {
               </div>
               <Card.Body>
                 <Row>
-                  <Col md={6}>
-                    <Card.Title style={cardTitleStyle}>Order ID: {orderData.order_id}</Card.Title>
+                  <Col md={6} style={{ borderRight: "1px solid #ddd" }}>
                     <Card.Text style={textStyle}>
-                      <strong>Order Number:</strong>{" "}
-                      <span style={valueStyle}>{orderData.order_number}</span>
+                      <strong>Order ID:</strong> <span style={valueStyle}>{orderData.order_id}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Customer Name:</strong>{" "}
-                      <span style={valueStyle}>{orderData.customer_name}</span>
+                      <strong>Order Number:</strong> <span style={valueStyle}>{orderData.order_number}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Customer Email:</strong>{" "}
-                      <span style={valueStyle}>{orderData.customer_email}</span>
+                      <strong>Customer Name:</strong> <span style={valueStyle}>{orderData.customer_name}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Order Date:</strong>{" "}
-                      <span style={valueStyle}>{orderData.order_date}</span>
+                      <strong>Customer Email:</strong> <span style={valueStyle}>{orderData.customer_email}</span>
+                    </Card.Text>
+                    <Card.Text style={textStyle}>
+                      <strong>Guest Name:</strong> <span style={valueStyle}>{orderData.guest_name}</span>
                     </Card.Text>
                   </Col>
                   <Col md={6}>
-                    <Card.Text style={textStyle}>
-                      <strong>Check-in Date:</strong>{" "}
-                      <span style={valueStyle}>{orderData.check_in}</span>
+                  <Card.Text style={textStyle}>
+                      <strong>Order Date:</strong> <span style={valueStyle}>{orderData.order_date}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Check-out Date:</strong>{" "}
-                      <span style={valueStyle}>{orderData.check_out}</span>
+                      <strong>Check-in Date:</strong> <span style={valueStyle}>{orderData.check_in}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Guest Name:</strong>{" "}
-                      <span style={valueStyle}>{orderData.guest_name}</span>
+                      <strong>Check-out Date:</strong> <span style={valueStyle}>{orderData.check_out}</span>
                     </Card.Text>
                     <Card.Text style={textStyle}>
-                      <strong>Rooms Amount:</strong>{" "}
-                      <span style={valueStyle}>{orderData.rooms_amount}</span>
-                    </Card.Text>
-                    <Card.Text style={textStyle}>
-                      <strong>Status:</strong>{" "}
-                      <span style={valueStyle}>{orderData.status}</span>
+                      <strong>Rooms Amount:</strong> <span style={valueStyle}>{orderData.rooms_amount}</span>
                     </Card.Text>
                   </Col>
                 </Row>

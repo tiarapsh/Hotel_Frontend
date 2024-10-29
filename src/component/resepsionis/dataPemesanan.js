@@ -1,4 +1,4 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -18,6 +18,7 @@ function DataPemesanan() {
   const [filterStatus, setFilterStatus] = useState("Semua");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [guestName, setGuestName] = useState(""); // State for guest name filter
   const [loading, setLoading] = useState(true); // State for loading
   const [error, setError] = useState(null); // State for error
 
@@ -94,18 +95,16 @@ function DataPemesanan() {
         console.error("Error updating order status:", error);
         alert(`Error updating order status: ${error.message}`);
     }
-};
+  };
 
-
-
-  // Filter orders based on status
+  // Filter orders based on status, dates, and guest name
   const filteredOrders = orders.filter((order) => {
-    const matchesStatus =
-      filterStatus === "Semua" || order.status === filterStatus;
+    const matchesStatus = filterStatus === "Semua" || order.status === filterStatus;
+    const matchesName = guestName === "" || order.guest_name.toLowerCase().includes(guestName.toLowerCase());
     
     // If no dates are provided, include all orders
     if (!startDate && !endDate) {
-      return matchesStatus;
+      return matchesStatus && matchesName;
     }
 
     // Check if the order's check-in and check-out dates fall within the selected range
@@ -115,7 +114,7 @@ function DataPemesanan() {
     const withinCheckIn = startDate ? checkInDate >= new Date(startDate) : true;
     const withinCheckOut = endDate ? checkOutDate <= new Date(endDate) : true;
 
-    return matchesStatus && withinCheckIn && withinCheckOut;
+    return matchesStatus && matchesName && withinCheckIn && withinCheckOut;
   });
 
   return (
@@ -136,7 +135,7 @@ function DataPemesanan() {
             {/* Filter Pesanan */}
             <Row className="mb-4">
               {/* Filter by Date */}
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Filter Tanggal Check-In</Form.Label>
                   <Form.Control
@@ -147,13 +146,26 @@ function DataPemesanan() {
                 </Form.Group>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Filter Tanggal Check-Out</Form.Label>
                   <Form.Control
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+
+              {/* Filter by Guest Name */}
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Filter Nama Tamu</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nama Tamu"
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
                   />
                 </Form.Group>
               </Col>

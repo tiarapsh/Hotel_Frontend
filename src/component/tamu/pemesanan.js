@@ -35,7 +35,7 @@ function Pemesanan() {
   const handlePopupSubmit = async () => {
     setShowPopup(false);
     try {
-      // Send a request to create an order
+      // Mengirim permintaan untuk membuat pesanan
       const response = await axios.post(
         `https://ukkhotel.smktelkom-mlg.sch.id/api/orders`,
         {
@@ -56,83 +56,146 @@ function Pemesanan() {
           withCredentials: false,
         }
       );
-      console.log(response);
 
-      // Assuming the response contains the order number
-      const orderNumber = response.data.data.order_number; // Adjust according to your API response
-      setOrderNumber(orderNumber); // Store the order number
-
-      // Now, request the receipt with the generated order number
-      const receiptResponse = await axios.get(
-        `https://ukkhotel.smktelkom-mlg.sch.id/api/orders/receipt/${orderNumber}`,
-        {
-          headers: {
-            makerID: "12",
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          withCredentials: false,
-        }
-      );
-      console.log(orderNumber);
-
-      const receiptData = JSON.stringify(
-        receiptResponse.data.orders.data,
-        null,
-        2
-      ); // Indented JSON string
+      // Mengambil nomor pesanan dari respons
+      const orderNumber = response.data.data.order_number;
+      setOrderNumber(orderNumber);
 
       const printWindow = window.open("", "_blank");
       printWindow.document.write(`
   <html>
     <head>
-      <title>Order Receipt</title>
+      <title>Invoice Pemesanan</title>
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
         body {
-          font-family: 'Roboto', sans-serif;
+          font-family: Arial, sans-serif;
+          padding: 20px;
           color: #333;
-          padding: 20px;
-          background-color: #f9f9f9;
         }
-        h1 {
-          text-align: center;
-          color: #d32f2f;
-          font-weight: 700;
+        h1, h2 {
+          color: #d32f2f; /* Warna merah */
         }
-        .receipt-container {
-          background-color: #ffffff;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          max-width: 600px;
+        .invoice-container {
+          max-width: 800px;
           margin: 0 auto;
-          font-size: 14px;
-          line-height: 1.6;
-        }
-        .receipt-container pre {
-          white-space: pre-wrap;
-          word-wrap: break-word;
-          font-family: 'Roboto Mono', monospace;
-          background-color: #f5f5f5;
-          padding: 15px;
+          border: 1px solid #ddd;
+          padding: 20px;
           border-radius: 8px;
         }
-        .footer {
-          text-align: center;
+        .invoice-header, .invoice-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+        .invoice-header h1 {
+          font-size: 24px;
+          margin: 0;
+        }
+        .invoice-header .invoice-number {
+          font-size: 20px;
+          font-weight: bold;
+          color: #d32f2f;
+        }
+        .invoice-details, .client-details {
+          display: flex;
+          justify-content: space-between;
           margin-top: 20px;
-          font-size: 0.85em;
+        }
+        .client-details div, .invoice-details div {
+          width: 45%;
+        }
+        .table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        .table th, .table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: center;
+        }
+        .table th {
+          background-color: #d32f2f;
+          color: #fff;
+          font-weight: bold;
+        }
+        .table td {
+          background-color: #f9f9f9;
+        }
+        .total-section {
+          text-align: right;
+          margin-top: 20px;
+        }
+        .total-section p {
+          font-size: 18px;
+          font-weight: bold;
+        }
+        .footer-info {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+          font-size: 0.9em;
           color: #666;
         }
       </style>
     </head>
     <body>
-      <h1>Order Receipt</h1>
-      <div class="receipt-container">
-        <pre>${receiptData}</pre>
-      </div>
-      <div class="footer">
-        <p>Generated on ${new Date().toLocaleString()}</p>
+      <div class="invoice-container">
+        <div class="invoice-header">
+          <h1>Invoice Pemesanan</h1>
+          <span class="invoice-number">#${orderNumber}</span>
+        </div>
+
+        <div class="invoice-details">
+          <div>
+            <p><strong>Tanggal:</strong> ${new Date().toLocaleDateString()}</p>
+          </div>
+          <div class="client-details">
+            <p><strong>Nama Pelanggan:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>NAMA</th>
+              <th>JUMLAH</th>
+              <th>HARGA SATUAN</th>
+              <th>SUB TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${roomType || "Akomodasi Hotel"}</td>
+              <td>${roomCount} Kamar x ${totalNights} Malam</td>
+              <td>${price.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}</td>
+              <td>${(price * roomCount * totalNights).toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="total-section">
+          <p>SUB TOTAL: ${totalPrice.toLocaleString("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          })}</p>
+        </div>
+
+        <div class="footer-info">
+          <div>
+            <p><strong>Wikusama Hotel</strong></p>
+            <p>Alamat: Jl. Danau Ranau, Sawojajar, Kec. Kedungkandang, Kota Malang, Jawa Timur 65139 </p>
+            <p>Telepon: +62 341-327-777</p>
+          </div>
+        </div>
       </div>
     </body>
   </html>
@@ -141,7 +204,7 @@ function Pemesanan() {
       printWindow.document.close();
       printWindow.onload = () => {
         printWindow.print();
-        navigate("/"); // Redirect to homepage after printing
+        navigate("/"); // Redirect ke halaman utama setelah mencetak
       };
     } catch (error) {
       console.error(
@@ -149,7 +212,7 @@ function Pemesanan() {
         error.response ? error.response.data : error.message
       );
       alert(
-        "Failed to generate order. Please check your input or try again later."
+        "Gagal membuat pesanan. Silakan periksa data atau coba lagi nanti."
       );
     }
   };

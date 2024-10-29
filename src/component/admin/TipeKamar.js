@@ -205,18 +205,19 @@ function TipeKamar() {
                           <th>Nama Kamar</th>
                           <th>Harga</th>
                           <th>Description</th>
+                          <th>Gambar</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {types.map((room) => (
                           <tr key={room.type_id}>
-                            {" "}
-                            {/* Ensure this is unique */}
                             <td>{room.type_id}</td>
                             <td>{room.type_name}</td>
                             <td>{room.price}</td>
                             <td>{room.desc}</td>
+                            <td>{room.photo_name}</td>
+
                             <td>
                               <Button
                                 variant="warning"

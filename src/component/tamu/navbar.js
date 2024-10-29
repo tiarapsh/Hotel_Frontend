@@ -7,7 +7,7 @@ import Hotel from "../asset/hotel-building (2).png";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Our Rooms", href: "/kamar" },
-  { name: "Order", href: "/checkOrder" },
+  { name: "History", href: "/checkOrder" },
 ];
 
 function classNames(...classes) {
